@@ -1,0 +1,18 @@
+@import 'vars';
+@if($order){
+    .col.order {
+        @for $i from 1 through $grid-columns {
+            &-#{$i} {
+                order: $i;
+            }
+        }
+    }
+    
+    .col.order-first {
+        order: -1;
+    }
+    
+    .col.order-last {
+        order: ($grid-columns + 1);
+    }
+}

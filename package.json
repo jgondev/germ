@@ -1,0 +1,21 @@
+{
+  "name": "germ",
+  "version": "0.1.0",
+  "description": "Grid Elastic Responsive Modular",
+  "scripts": {
+    "build": "sass src/germ.scss dist/germ.css && sass src/germ.scss dist/germ.min.css -s \"compressed\""
+  },
+  "keywords": [
+    "css",
+    "framework",
+    "lightweight",
+    "sass",
+    "grid",
+    "responsive"
+  ],
+  "author": "jgondev",
+  "license": "MIT",
+  "dependencies": {
+    "sass": "^1.34.0"
+  }
+}

@@ -1,0 +1,209 @@
+@use "sass:math";
+
+@import 'vars';
+
+@mixin defaultDefinition($row: $rowClass){
+    .#{$row} {
+        display: flex;
+        flex-wrap: wrap;
+      
+        &>.col {
+          flex: 1 0 auto;
+          display: block;
+          margin: $margin;
+          max-width: calc(100% - #{$gutter});
+        }
+      
+        &.fw {
+          margin: -$margin;
+        }
+      
+        &.ng {
+          &.fw {
+            margin: 0;
+          }
+      
+          &>.col {
+            margin: 0;
+            max-width: 100%;
+          }
+        }
+      
+        &.hg {
+          &.fw {
+            margin: -$halfMargin;
+          }
+      
+          &>.col {
+            margin: $halfMargin;
+            max-width: calc(100% - #{$halfGutter});
+          }
+        }
+      }
+      
+      .#{$row}>br {
+        width: 100%;
+        content: '';
+      }
+}
+
+@function getColumnBasis($cols, $totalCols: $grid-columns) {
+    $col-base: math.div(100%, $totalCols);
+    @return $cols * $col-base;
+}
+
+@mixin baseColumns($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            flex-basis: calc(#{getColumnBasis($i, $cols)} - #{$gutter});
+            max-width: calc(#{getColumnBasis($i, $cols)} - #{$gutter});
+        }
+    }
+}
+
+@mixin baseOffset($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            margin-left: calc(#{getColumnBasis($i, $cols)} + #{$margin}) !important;
+        }
+    }
+}
+
+@mixin ngColumns($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            flex-basis: getColumnBasis($i, $cols);
+            max-width: getColumnBasis($i, $cols);
+        }
+    }
+}
+
+@mixin ngOffset($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            margin-left: getColumnBasis($i, $cols) !important;
+        }
+    }
+}
+
+@mixin hgColumns($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            flex-basis: calc(#{getColumnBasis($i, $cols)} - #{$halfGutter});
+            max-width: calc(#{getColumnBasis($i, $cols)} - #{$halfGutter});
+        }
+    }
+}
+
+@mixin hgOffset($cols: $grid-columns) {
+    @for $i from 1 through $cols {
+        &-#{$i} {
+            margin-left: calc(#{getColumnBasis($i, $cols)} + #{$halfMargin}) !important;
+        }
+    }
+}
+
+@mixin hiddenClasses($device, $row: $rowClass) {
+
+    .#{$row}.hidden-#{$device},
+    .#{$row} .hidden-#{$device} {
+        display: none;
+    }
+}
+
+@mixin deviceColsDefinition($device, $cols: $grid-columns, $row: $rowClass, $ng: $noGutterEnabled, $hg: $halfGutterEnabled, $offset: $offsetEnabled) {
+    .#{$row}>.col.#{$device} {
+        @include baseColumns($cols);
+
+        @if($offset) {
+            &-offset {
+                @include baseOffset($cols);
+            }
+        }
+    }
+
+    @if($ng) {
+        .#{$row}{
+
+        .ng>.col.#{$device} {
+            @include ngColumns($cols);
+
+            @if($offset) {
+                &-offset {
+                    @include ngOffset($cols);
+                }
+            }
+        }}
+    }
+
+    @if($hg) {
+        .#{$row}.hg>.col.#{$device} {
+            @include hgColumns($cols);
+
+            @if($offset) {
+                &-offset {
+                    @include hgOffset($cols);
+                }
+            }
+        }
+    }
+
+    .#{$row}>.col[class*=".#{$device}-"] {
+        flex-grow: 0;
+    }
+
+    .#{$row}>.col.#{$device} {
+        flex-grow: 1;
+    }
+}
+
+@mixin fullDevicesDefinition($cols: $grid-columns, $row: $rowClass, $ng: $noGutterEnabled, $hg: $halfGutterEnabled, $offset: $offsetEnabled) {
+
+    @each $key,
+    $device in $devices {
+        @if(map-get($device, min) == -1) {
+            @include deviceColsDefinition($key, $cols, $row, $ng, $hg, $offset);
+        }
+
+        @else {
+            @media screen and (min-width: map-get($device, min)) {
+                @include deviceColsDefinition($key, $cols, $row, $ng, $hg, $offset);
+            }
+        }
+
+        @if(map-get($device, min) != -1 and map-get($device, max) != -1) {
+            @media screen and (min-width: map-get($device, min)) and (max-width: map-get($device, max)) {
+                @include hiddenClasses($key, $row);
+            }
+        }
+
+        @else if(map-get($device, min)== -1 and map-get($device, max) != -1) {
+            @media screen and (max-width: map-get($device, max)) {
+                @include hiddenClasses($key, $row);
+            }
+        }
+
+        @else if(map-get($device, min) != -1 and map-get($device, max)== -1) {
+            @media screen and (min-width: map-get($device, min)) {
+                @include hiddenClasses($key, $row);
+            }
+        }
+    }
+}
+
+@mixin sizes{
+    *[class*="size-"] {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .size {
+        @each $key, $device in $devices{
+            @if(map-get($device, bp) != -1){
+                &-#{$key} {
+                    max-width: map-get($device, bp);
+                }
+            }
+        }
+    }
+}

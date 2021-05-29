@@ -1,0 +1,15 @@
+@import 'vars';
+@import 'mixins';
+@import 'order';
+@import 'helpers';
+
+
+@include defaultDefinition;
+@include sizes;
+@include fullDevicesDefinition;
+
+//Demo purposes
+// @include defaultDefinition("row-16");
+// @include fullDevicesDefinition($cols: 16, $row: "row-16");
+// @include defaultDefinition("row-20");
+// @include fullDevicesDefinition($cols: 20, $row: "row-20");

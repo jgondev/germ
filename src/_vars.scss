@@ -1,0 +1,29 @@
+@use "sass:math";
+
+//Configuration variables
+$grid-columns: 12;
+$gutter: 40px;
+$rowClass: "row";
+$xs-bp: 576px;
+$sm-bp: 768px;
+$md-bp: 992px;
+$lg-bp: 1200px;
+$devices: (
+    xs : (bp: $xs-bp, min: -1, max: $xs-bp - 1), 
+    sm : (bp: $sm-bp, min: $xs-bp, max: $sm-bp - 1), 
+    md : (bp: $md-bp, min: $sm-bp, max: $md-bp - 1), 
+    lg : (bp: $lg-bp, min: $md-bp, max: $lg-bp - 1),
+    xl : (bp: -1, min: $lg-bp, max: -1)
+);
+
+//Extensions
+$helpers: true;
+$order: true;
+$noGutterEnabled: true;
+$halfGutterEnabled: true;
+$offsetEnabled: true;
+
+//Calculated variables (do not modify)
+$margin: math.div($gutter, 2);
+$halfGutter: math.div($gutter, 2);
+$halfMargin: math.div($halfGutter, 2);

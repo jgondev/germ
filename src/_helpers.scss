@@ -1,0 +1,72 @@
+@import 'vars';
+@if($helpers) {
+    .fl {
+        display: flex !important;
+    }
+
+    .f-ng {
+        flex-grow: 0 !important;
+    }
+
+    .f-a {
+        &-s {
+            align-items: flex-start;
+        }
+
+        &-c {
+            align-items: center;
+        }
+
+        &-e {
+            align-items: flex-end;
+        }
+    }
+
+    .f-j {
+        &-s {
+            justify-content: flex-start;
+        }
+
+        &-c {
+            justify-content: center;
+        }
+
+        &-e {
+            justify-content: flex-end;
+        }
+
+        &-sb {
+            justify-content: space-between;
+        }
+
+        &-se {
+            justify-content: space-evenly;
+        }
+
+        &-sa {
+            justify-content: space-around;
+        }
+    }
+
+    .f-d {
+        &-r {
+            flex-direction: row;
+        }
+
+        &-c {
+            flex-direction: column;
+        }
+
+        &-rr {
+            flex-direction: row-reverse;
+        }
+
+        &-cr {
+            flex-direction: column-reverse;
+        }
+    }
+
+    .fh{
+        height: 100% !important;
+    }
+}
